@@ -5,11 +5,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Runtime.CompilerServices;
 
+return;
 
-namespace ef_core_asset_tracking
+
+namespace AssetTracker
 {
 
-  internal class AssetTrackerDbContext(string ConnStr = @"Data Source=.\asset-tracker.sqlite3"):DbContext
+  public class AssetTrackerDbContext(string ConnStr = @"Data Source=..\asset-tracker.sqlite3"):DbContext
   {
     private string ConnStr { get; } = ConnStr;
 
@@ -25,7 +27,7 @@ namespace ef_core_asset_tracking
 
 
 
-  internal class Asset(Asset.AssetType Type, string Brand, string Model, Asset.AssetLocation Location, int Price, DateTime DateOfPurchase)
+  public class Asset(Asset.AssetType Type, string Brand, string Model, Asset.AssetLocation Location, int Price, DateTime DateOfPurchase)
   {
     public enum AssetType { COMPUTER, PHONE, TABLET }
     public enum AssetLocation { EUROPE, ASIA, AFRICA }
