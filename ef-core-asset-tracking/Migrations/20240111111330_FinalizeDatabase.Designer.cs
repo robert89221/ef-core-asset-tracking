@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ef_core_asset_tracking.Migrations
 {
     [DbContext(typeof(AssetTrackerDbContext))]
-    [Migration("20240109184934_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20240111111330_FinalizeDatabase")]
+    partial class FinalizeDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,7 @@ namespace ef_core_asset_tracking.Migrations
 
                     b.Property<string>("Brand")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateOfPurchase")
@@ -39,7 +39,7 @@ namespace ef_core_asset_tracking.Migrations
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Price")
@@ -51,6 +51,38 @@ namespace ef_core_asset_tracking.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Assets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Brand = "Siemens",
+                            DateOfPurchase = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 0,
+                            Model = "WS100",
+                            Price = 2500,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Brand = "Nokia",
+                            DateOfPurchase = new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 2,
+                            Model = "6.1",
+                            Price = 500,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Brand = "Samsung",
+                            DateOfPurchase = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 1,
+                            Model = "ST-14",
+                            Price = 400,
+                            Type = 2
+                        });
                 });
 #pragma warning restore 612, 618
         }

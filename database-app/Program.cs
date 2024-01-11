@@ -14,14 +14,7 @@ var db = new AssetTrackerDbContext(@"Data Source=..\..\..\..\asset-tracker.sqlit
 
 while (true)
 {
-  var ncomp = db.Assets.Where(x => x.Type == Asset.AssetType.COMPUTER).Count();
-  var nphone = db.Assets.Where(x => x.Type == Asset.AssetType.PHONE).Count();
-  var ntab = db.Assets.Where(x => x.Type == Asset.AssetType.TABLET).Count();
-  var value = db.Assets.Select(x => x.Price).Sum();
-  var summary = $"{ncomp} computers, {nphone} phones, {ntab} tablets, total value of EUR {value} \n\n";
-
-  Print(GRAY, summary +
-              "(L) List all assets \n" +
+  Print(GRAY, "(L) List all assets \n" +
               "(S) Search assets   \n" +
               "(U) Update asset    \n" +
               "(A) Add new asset   \n" +
@@ -39,9 +32,29 @@ while (true)
 }
 
 
+//  list all assets
+
 void ListAssets()
 {
-  PrintLine(GRAY, "List assets");
+  if (!db.Assets.Any())
+  {
+    PrintLine(GRAY, "\nNo assets");
+    return;
+  }
+
+  PrintLine(GRAY, "\nType        Brand       Model          Office         Date        Price\n" +
+                  "----------  ----------  -------------  -------------  ----------  ----------------");
+  foreach (var Asset in db.Assets.OrderBy(x => x.Type).OrderBy(x => x.DateOfPurchase))
+  {
+    PrintLine(GRAY, Asset.ToString());
+  }
+
+  var ncomp = db.Assets.Where(x => x.Type == Asset.AssetType.COMPUTER).Count();
+  var nphone = db.Assets.Where(x => x.Type == Asset.AssetType.PHONE).Count();
+  var ntab = db.Assets.Where(x => x.Type == Asset.AssetType.TABLET).Count();
+  var value = db.Assets.Select(x => x.Price).Sum();
+  var summary = $"{ncomp} computers, {nphone} phones, {ntab} tablets, total value of EUR {value}";
+  PrintLine(GRAY, $"\n{summary}\n");
 }
 
 
