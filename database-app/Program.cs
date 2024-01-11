@@ -1,6 +1,7 @@
 ﻿
 using AssetTracker;
 using System.Drawing;
+using System.Numerics;
 
 
 const ConsoleColor RED = ConsoleColor.Red;
@@ -19,7 +20,8 @@ while (true)
               "(U) Update asset    \n" +
               "(A) Add new asset   \n" +
               "(D) Delete asset    \n" +
-              "(X) Exit            \n\n");
+              "(X) Exit            \n\n" +
+              "Your choice: ");
 
   char choice = GetChoice("lsuadx");
 
@@ -44,7 +46,7 @@ void ListAssets()
 
   PrintLine(GRAY, "\nType        Brand       Model          Office         Date        Price\n" +
                   "----------  ----------  -------------  -------------  ----------  ----------------");
-  foreach (var Asset in db.Assets.OrderBy(x => x.Type).OrderBy(x => x.DateOfPurchase))
+  foreach (var Asset in db.Assets.OrderBy(x => x.Type).ThenBy(x => x.DateOfPurchase))
   {
     PrintLine(GRAY, Asset.ToString());
   }
@@ -80,9 +82,43 @@ void Search()
 }
 
 
+//  add asset
+
 void Add()
 {
-  PrintLine(GRAY, "Add asset");
+  Print(GRAY, "Add new (C) Computer (P) Phone (T) Tablet: ");
+  var choice = GetChoice("cpt");
+  Asset.AssetType type;
+  if (choice == 'c') type = Asset.AssetType.COMPUTER;
+  else if (choice == 'p') type = Asset.AssetType.PHONE;
+  else type = Asset.AssetType.TABLET;
+
+  var brand = GetLine("Brand");
+  var model = GetLine("Model");
+
+  Print(GRAY, "Choose office (E) Europe (S) South Africa (A) Asia: ");
+  choice = GetChoice("esa");
+  Asset.AssetLocation location;
+  if (choice == 'e') location = Asset.AssetLocation.EUROPE;
+  else if (choice == 's') location = Asset.AssetLocation.AFRICA;
+  else location = Asset.AssetLocation.ASIA;
+
+  var price = Convert.ToInt32(GetLine("Price"));
+
+  db.Assets.Add(new Asset(0, type, brand, model, location, price, DateTime.Now));
+  db.SaveChanges();
+}
+
+string GetLine(string value)
+{
+  string line;
+  do
+  {
+    Print(GRAY, $"{value}: ");
+    line = Console.ReadLine().Trim();
+  } while (line == "");
+
+  return line;
 }
 
 
@@ -115,11 +151,9 @@ char GetChoice(string choices)
   char c;
   do
   {
-    Print(GRAY, "Your choice: ");
-    c = Console.ReadKey().KeyChar;
-    Console.WriteLine();
-
+    c = Console.ReadKey(true).KeyChar;
   } while (!choices.Contains(c));
+  Console.WriteLine(c);
 
   return c;
 }
