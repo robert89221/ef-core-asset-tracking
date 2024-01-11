@@ -58,9 +58,25 @@ void ListAssets()
 }
 
 
+//  search
+
 void Search()
 {
-  PrintLine(GRAY, "Search assets");
+  Console.WriteLine();
+
+  string[] keywords;
+  do
+  {
+    Print(GRAY, "Enter keywords: ");
+    keywords = Console.ReadLine().Trim().ToLower().Split();
+
+  } while(keywords.Count() == 1 && keywords[0] == "");
+
+  foreach (var Asset in db.Assets)
+  {
+    if (keywords.Any(kw => Asset.ToString().ToLower().Contains(kw)))    PrintLine(GRAY, Asset.ToString());
+  }
+
 }
 
 
