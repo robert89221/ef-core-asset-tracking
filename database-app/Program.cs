@@ -1,5 +1,7 @@
 ﻿
 using AssetTracker;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 using System.Drawing;
 using System.Numerics;
 
@@ -25,7 +27,7 @@ while (true)
 
   char choice = GetChoice("lsuadx");
 
-  if      (choice == 'l')    ListAssets();
+  if      (choice == 'l')    ListAssets(ShowSummary:true);
   else if (choice == 's')    Search();
   else if (choice == 'a')    Add();
   else if (choice == 'u')    Update();
@@ -36,7 +38,7 @@ while (true)
 
 //  list all assets
 
-void ListAssets()
+void ListAssets(bool ShowSummary=false)
 {
   if (!db.Assets.Any())
   {
@@ -44,19 +46,22 @@ void ListAssets()
     return;
   }
 
-  PrintLine(GRAY, "\nType        Brand       Model          Office         Date        Price\n" +
-                  "----------  ----------  -------------  -------------  ----------  ----------------");
+  PrintLine(GRAY, "\n   #  Type        Brand       Model          Office         Date        Price\n" +
+                  "----  ----------  ----------  -------------  -------------  ----------  ----------------");
   foreach (var Asset in db.Assets.OrderBy(x => x.Type).ThenBy(x => x.DateOfPurchase))
   {
     PrintLine(GRAY, Asset.ToString());
   }
 
-  var ncomp = db.Assets.Where(x => x.Type == Asset.AssetType.COMPUTER).Count();
-  var nphone = db.Assets.Where(x => x.Type == Asset.AssetType.PHONE).Count();
-  var ntab = db.Assets.Where(x => x.Type == Asset.AssetType.TABLET).Count();
-  var value = db.Assets.Select(x => x.Price).Sum();
-  var summary = $"{ncomp} computers, {nphone} phones, {ntab} tablets, total value of EUR {value}";
-  PrintLine(GRAY, $"\n{summary}\n");
+  if (ShowSummary)
+  {
+    var ncomp = db.Assets.Where(x => x.Type == Asset.AssetType.COMPUTER).Count();
+    var nphone = db.Assets.Where(x => x.Type == Asset.AssetType.PHONE).Count();
+    var ntab = db.Assets.Where(x => x.Type == Asset.AssetType.TABLET).Count();
+    var value = db.Assets.Select(x => x.Price).Sum();
+    var summary = $"{ncomp} computers, {nphone} phones, {ntab} tablets, total value of EUR {value}";
+    PrintLine(GRAY, $"\n{summary}\n");
+  }
 }
 
 
@@ -128,9 +133,23 @@ void Update()
 }
 
 
+//  delete assets
+
 void Delete()
 {
-  PrintLine(GRAY, "Delete asset");
+  ListAssets();
+
+  var ids = new List<int>();
+
+  Print(GRAY, "Enter IDs of assets to delete: ");
+  foreach (var input in Console.ReadLine().Trim().Split())
+  {
+    if (int.TryParse(input, out int id))    ids.Add(id);
+  }
+
+  var query = db.Assets.Where(x => ids.Contains(x.Id));
+  db.Assets.RemoveRange(query);
+  db.SaveChanges();
 }
 
 

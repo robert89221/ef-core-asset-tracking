@@ -73,7 +73,7 @@ namespace AssetTracker
       else if (Type == AssetType.PHONE) newType = "Phone";
       else newType = "Tablet";
 
-      return $"{newType,-12}{Brand,-12}{Model,-15}{newLocation,-15}{DateOfPurchase.ToShortDateString(),-12}{localPrice,12:0.00}{currency,4}";
+      return $"{Id,4}  {newType,-12}{Brand,-12}{Model,-15}{newLocation,-15}{DateOfPurchase.ToShortDateString(),-12}{localPrice,12:0.00}{currency,4}";
     }
   }
 
