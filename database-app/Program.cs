@@ -21,7 +21,7 @@ while (true)
               "(S) Search assets   \n" +
               "(T) Transfer assets \n" +
               "(A) Add new asset   \n" +
-              "(D) Delete asseta   \n" +
+              "(D) Delete assets   \n" +
               "(X) Exit            \n\n" +
               "Your choice: ");
 
@@ -48,9 +48,16 @@ void ListAssets(bool ShowSummary=false)
 
   PrintLine(GRAY, "\n   #  Type        Brand       Model          Office         Date        Price\n" +
                   "----  ----------  ----------  -------------  -------------  ----------  ----------------");
-  foreach (var Asset in db.Assets.OrderBy(x => x.Type).ThenBy(x => x.DateOfPurchase))
+  foreach (var ast in db.Assets.OrderBy(x => x.Type).ThenBy(x => x.DateOfPurchase))
   {
-    PrintLine(GRAY, Asset.ToString());
+    ConsoleColor col;
+
+    var days = (ast.DateOfPurchase.AddYears(3)-DateTime.Today).Days;
+    if (days <= 0) col = ConsoleColor.Red;
+    else if (days < 90) col = ConsoleColor.Yellow;
+    else col = ConsoleColor.Gray;
+
+    PrintLine(col, ast.ToString());
   }
 
   if (ShowSummary)

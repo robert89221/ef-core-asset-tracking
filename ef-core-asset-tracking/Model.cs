@@ -33,9 +33,17 @@ namespace AssetTracker
       var afr = Asset.AssetLocation.AFRICA;
       var asi = Asset.AssetLocation.ASIA;
 
-      mdl.Entity<Asset>().HasData(new Asset(1, com, "Siemens", "WS100", eur, 2500, new DateTime(2024, 1, 2)));
-      mdl.Entity<Asset>().HasData(new Asset(2, pho, "Nokia",   "6.1",   afr,  500, new DateTime(2024, 1, 3)));
-      mdl.Entity<Asset>().HasData(new Asset(3, tab, "Samsung", "ST-14", asi,  400, new DateTime(2024, 1, 4)));
+      mdl.Entity<Asset>().HasData(new Asset(1, com, "Siemens",   "WS100", eur, 2500, DateTime.Today.AddDays(-1100)));
+      mdl.Entity<Asset>().HasData(new Asset(2, com, "Asus",    "Zenbook", eur,  745,  DateTime.Today.AddDays(-50)));
+      mdl.Entity<Asset>().HasData(new Asset(3, pho, "Nokia",       "4.2", eur,  180,  DateTime.Today.AddDays(-1000)));
+
+      mdl.Entity<Asset>().HasData(new Asset(4, pho, "Xiaomi", "Redmi 5", afr, 320, DateTime.Today.AddDays(-1200)));
+      mdl.Entity<Asset>().HasData(new Asset(5, pho, "LG",         "Max", afr, 545, DateTime.Today.AddDays(-700)));
+      mdl.Entity<Asset>().HasData(new Asset(6, pho, "Vivo", "V-10Micro", afr, 125, DateTime.Today.AddDays(-1050)));
+
+      mdl.Entity<Asset>().HasData(new Asset(7, tab, "Samsung", "Pad 5", asi, 855, DateTime.Today.AddDays(-960)));
+      mdl.Entity<Asset>().HasData(new Asset(8, tab, "Asus",  "Matepad", asi, 395, DateTime.Today.AddDays(-500)));
+      mdl.Entity<Asset>().HasData(new Asset(9, pho, "Huawei",  "Ultra", asi, 680, DateTime.Today.AddDays(-200)));
     }
   }
 
