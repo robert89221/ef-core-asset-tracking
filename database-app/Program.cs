@@ -19,18 +19,18 @@ while (true)
 {
   Print(GRAY, "(L) List all assets \n" +
               "(S) Search assets   \n" +
-              "(U) Update asset    \n" +
+              "(T) Transfer assets \n" +
               "(A) Add new asset   \n" +
-              "(D) Delete asset    \n" +
+              "(D) Delete asseta   \n" +
               "(X) Exit            \n\n" +
               "Your choice: ");
 
-  char choice = GetChoice("lsuadx");
+  char choice = GetChoice("lstadx");
 
   if      (choice == 'l')    ListAssets(ShowSummary:true);
   else if (choice == 's')    Search();
   else if (choice == 'a')    Add();
-  else if (choice == 'u')    Update();
+  else if (choice == 't')    Transfer();
   else if (choice == 'd')    Delete();
   else if (choice == 'x')    return;
 }
@@ -108,7 +108,7 @@ void Add()
   else if (choice == 's') location = Asset.AssetLocation.AFRICA;
   else location = Asset.AssetLocation.ASIA;
 
-  var price = Convert.ToInt32(GetLine("Price"));
+  var price = Convert.ToInt32(GetLine("Price (EUR)"));
 
   db.Assets.Add(new Asset(0, type, brand, model, location, price, DateTime.Now));
   db.SaveChanges();
@@ -127,9 +127,32 @@ string GetLine(string value)
 }
 
 
-void Update()
+//  transfer asset
+
+void Transfer()
 {
-  PrintLine(GRAY, "Update asset");
+  ListAssets();
+
+  var ids = new List<int>();
+
+  Print(GRAY, "Enter IDs of assets to transfer: ");
+  foreach (var input in Console.ReadLine().Trim().Split())
+  {
+    if (int.TryParse(input, out int id)) ids.Add(id);
+  }
+
+  Print(GRAY, "Transfer assets to new office (E) Europe (S) South Africa (A) Asia: ");
+  var choice = GetChoice("esa");
+
+  Asset.AssetLocation newLoc;
+  if (choice == 'e') newLoc = Asset.AssetLocation.EUROPE;
+  else if (choice == 's') newLoc = Asset.AssetLocation.AFRICA;
+  else newLoc = Asset.AssetLocation.ASIA;
+
+  var query = db.Assets.Where(x => ids.Contains(x.Id));
+  foreach (var ast in query)    ast.Location = newLoc;
+
+  db.SaveChanges();
 }
 
 
