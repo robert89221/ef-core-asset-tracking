@@ -1,11 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Common;
-using System.Runtime.CompilerServices;
-using System.Reflection;
-using System.ComponentModel;
 
 return;
 
@@ -48,7 +43,6 @@ namespace AssetTracker
   }
 
 
-
   public class Asset(int Id, Asset.AssetType Type, string Brand, string Model, Asset.AssetLocation Location, int Price, DateTime DateOfPurchase)
   {
     public enum AssetType { COMPUTER, PHONE, TABLET }
@@ -72,14 +66,14 @@ namespace AssetTracker
 
       double localPrice;
       string currency, newLocation;
-      if (Location == AssetLocation.EUROPE) (newLocation, localPrice, currency) = ("Europe", Price, "EUR");
-      else if (Location == AssetLocation.AFRICA) (newLocation, localPrice, currency) = ("Africa", Price * 20.4, "ZAR");
-      else (newLocation, localPrice, currency) = ("Asia", Price * 7.82, "CNY");
+      if      (Location == AssetLocation.EUROPE)    (newLocation, localPrice, currency) = ("Europe", Price, "EUR");
+      else if (Location == AssetLocation.AFRICA)    (newLocation, localPrice, currency) = ("Africa", Price * 20.4, "ZAR");
+      else                                          (newLocation, localPrice, currency) = ("Asia", Price * 7.82, "CNY");
 
       string newType;
-      if (Type == AssetType.COMPUTER) newType = "Computer";
-      else if (Type == AssetType.PHONE) newType = "Phone";
-      else newType = "Tablet";
+      if      (Type == AssetType.COMPUTER)    newType = "Computer";
+      else if (Type == AssetType.PHONE)       newType = "Phone";
+      else                                    newType = "Tablet";
 
       return $"{Id,4}  {newType,-12}{Brand,-12}{Model,-15}{newLocation,-15}{DateOfPurchase.ToShortDateString(),-12}{localPrice,12:0.00}{currency,4}";
     }
